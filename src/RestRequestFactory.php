@@ -5,6 +5,7 @@ namespace Argo\RestClient;
 use Argo\RestClient\Exception\BadRequestException;
 use Argo\RestClient\Exception\ConflictException;
 use Argo\RestClient\Exception\ForbiddenException;
+use Argo\RestClient\Exception\GoneException;
 use Argo\RestClient\Exception\InternalServerError;
 use Argo\RestClient\Exception\NotFoundException;
 use Argo\RestClient\Exception\NotImplementedException;
@@ -27,11 +28,12 @@ use Psr\Http\Message\StreamInterface;
  */
 class RestRequestFactory implements RestRequestFactoryInterface
 {
+    protected string $baseUrl = '';
+
     public function __construct(
         protected readonly RequestFactoryInterface $requestFactory,
         protected readonly StreamFactoryInterface $streamFactory,
         protected readonly RestClientSerializerInterface $serializer,
-        protected string $baseUrl = '',
     ) {}
 
     public function setUrl(string $baseUrl): void
@@ -83,9 +85,10 @@ class RestRequestFactory implements RestRequestFactoryInterface
         }
 
         try {
+            $returnType = $methodDefinition->methodDefinition->returnValue->type;
             if (
-                $methodDefinition->returnType instanceof ClassType
-                && is_a($methodDefinition->returnType->className, StreamInterface::class, true)
+                $returnType instanceof ClassType
+                && is_a($returnType->className, StreamInterface::class, true)
             ) {
                 return $response->getBody();
             }
@@ -95,7 +98,7 @@ class RestRequestFactory implements RestRequestFactoryInterface
                 return true;
             }
 
-            return $this->deserializeResponse($body, $methodDefinition->returnType);
+            return $this->deserializeResponse($body, $returnType);
         } catch (\Throwable $e) {
             throw new RestException($response, $e);
         }
@@ -121,6 +124,7 @@ class RestRequestFactory implements RestRequestFactoryInterface
             403 => new ForbiddenException($response),
             404 => new NotFoundException($response),
             409 => new ConflictException($response),
+            410 => new GoneException($response),
             500 => new InternalServerError($response),
             501 => new NotImplementedException($response),
             default => new RestException($response),

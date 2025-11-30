@@ -62,9 +62,9 @@ final readonly class ClientMethodParser
         }
 
         return new RestMethodDefinition(
+            $methodDefinition,
             $httpMethod,
             $path,
-            $methodDefinition->returnValue->type,
             $body,
             array_filter($data),
         );
