@@ -1,0 +1,52 @@
+{
+    "name": "argo-php/rest-client",
+    "description": "Client and mapper for REST API SDKs",
+    "license": "MIT",
+    "type": "package",
+    "authors": [
+        {
+            "name": "Babushkin Pavel",
+            "email": "idarksoft@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Argo\\RestClient\\": "src/"
+        }
+    },
+    "require": {
+        "php": "8.3.*|8.4.*|8.5.*",
+        "argo-php/entity-definition": "^1.0",
+        "argo-php/json-encoder": "^1.0",
+        "argo-php/serializer": "^1.0",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^2.0",
+        "psr-discovery/http-client-implementations": "^1.0",
+        "psr-discovery/http-factory-implementations": "^1.0",
+        "php-http/multipart-stream-builder": "^1.3"
+    },
+    "require-dev": {
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "mockery/mockery": "^1.6",
+        "roave/security-advisories": "dev-latest",
+        "laravel/pint": "^1.26",
+        "vimeo/psalm": "^6.13"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Argo\\RestClient\\DI\\LaravelServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "pint": "vendor/bin/pint",
+        "psalm": "vendor/bin/psalm --no-cache --output-format=phpstorm"
+    }
+}
