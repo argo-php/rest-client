@@ -44,11 +44,11 @@ final readonly class RestClientSerializerFactory
         return [
             $container->get(UnionDenormalizer::class),
             $container->get(ArrayNormalizer::class),
+            $container->get(CarbonNormalizer::class),
+            $container->get(BackedEnumNormalizer::class),
             $container->get(CustomNormalizer::class),
             $container->get(ArrayableNormalizer::class),
             $container->get(JsonSerializableNormalizer::class),
-            $container->get(CarbonNormalizer::class),
-            $container->get(BackedEnumNormalizer::class),
             $container->get(ObjectNormalizer::class),
             $container->get(BuiltinDenormalizer::class),
         ];
